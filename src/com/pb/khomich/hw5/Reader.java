@@ -15,6 +15,14 @@ public class Reader {
     private String birthday;
     private String phone;
 
+    public Reader(String FIO, String numBilet, String facultet,String birthday,String phone){
+        this.FIO = FIO;
+        this.numBilet = numBilet;
+        this.facultet = facultet;
+        this.birthday = birthday;
+        this.phone    = phone;
+    }
+
     public String getFIO() {
         return FIO;
     }
@@ -77,6 +85,11 @@ public class Reader {
     //Выводит на консоль сообщение
     //"Петров В. В. взял книги: Приключения, Словарь, Энциклопедия".
 
+    public static void takeBook(String[]getName, String FIO) {
+
+        System.out.println(FIO + " взял книги: "+ Book.getName());
+
+    }
 
 
     //- takeBook, который будет принимать переменное количество объектов класса Book.

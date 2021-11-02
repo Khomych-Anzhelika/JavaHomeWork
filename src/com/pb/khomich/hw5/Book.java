@@ -6,44 +6,42 @@
 package com.pb.khomich.hw5;
 
 public class Book {
-    private String[] name;
-    private String[] author;
-    private int[] year;
+    private String name;
+    private String author;
+    private int year;
 
-
-    public Book(String[] name, String[] author, int[] year){
+    public Book(String name, String author, int year){
         this.name = name;
-        this.author = author;
+       this.author = author;
         this.year = year;
     }
 
-
-    public String[] getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(String[] name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String[] getAuthor() {
-        return author.clone();
+    public String getAuthor() {
+        return author;
     }
 
-    public void setAuthor(String[] author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
-    public int[] getYear() {
+    public int getYear() {
         return year;
     }
 
-    public void setYear(int[] year) {
+    public void setYear(int year) {
         this.year = year;
     }
 
-//    String getInfoBook() {
-//        return "[название:" + name + ", автор: " + author +", год издания:" + year + "]";
-//    }
+    String getInfoBook() {
+        return "[название:" + name + ", автор: " + author +", год издания:" + year + "]";
+    }
 
 }

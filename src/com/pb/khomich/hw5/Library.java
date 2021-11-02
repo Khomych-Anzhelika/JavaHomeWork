@@ -15,47 +15,49 @@ public class Library {
 //        Reader reader1 = new Reader();
 //        reader1.setFIO("Хомич Анжелика Александровна");
 //        reader1.setFacultet("Физ-тех");
+        Book[] bookArray = new Book[]{new Book("Приключения", "Иванов И.И.", 2000),
+                                      new Book("Словарь", "Сидоров А.В.", 1980),
+                                      new Book("Энциклопедия", "Гусев К.В.", 2010)};
 
-//        Book book[] = {new Book("Приключения", "Иванов И.И.", 2000),
-//                        new Book("Словарь", "Сидоров А.В.", 1980),
-//                        new Book("Энциклопедия", "Гусев К.В.", 2010)};
+        for(int i = 0; i< bookArray.length; i++)
+            System.out.println(bookArray[i].getInfoBook());
 
-        Book book = new Book(new String[]{"Приключения","Словарь","Энциклопедия"},
-                              new String[]{"Иванов И.И.","Сидоров А.В.","Гусев К.В."},
-                              new int[]{2000,1980,2010});
+        System.out.println("\n");
+        Reader[] readerArray = new Reader[]{new Reader("Петров О.К","BB25468","Физико-технический","2000-12-20","0638647593"),
+                                           new Reader("Кремень У.П","BB58623","Математический","2000-10-15","0632223569"),
+                                           new Reader("Трактор Ж.М","BB00831","Юридический","2009-09-01","0662879632")};
+
+        for(int i = 0; i<bookArray.length; i++) {
+            System.out.println(readerArray[i].getInfoReader());
+        }
+        System.out.println("\n");
+        Reader.takeBook(3, readerArray[2].getFIO());
+        Reader.takeBook(1, readerArray[0].getFIO());
+        System.out.println("\n");
+        Reader.returnBook(3, readerArray[2].getFIO());
+        Reader.returnBook(1, readerArray[0].getFIO());
+
+        System.out.println("\n");
+
+        String[] arrayName = new String[bookArray.length];
+
+        for(int i = 0; i<bookArray.length; i++){
+            arrayName[i] = bookArray[i].getName();
+            System.out.println(arrayName[i]);
+        }
+
+        Reader.takeBook(arrayName[i],readerArray[0].getFIO());
+
+
+        //String arrayNameStr = String.copyValueOf(arrayName); //преобразуем в нужный тип данных (String)
+
+        //System.out.println(arrayNameStr);
+        //System.out.println(book1);
+        //Reader.takeBook(, readerArray[2].getFIO());
 
 
         //System.out.println(book1[0]);
-        book.getAuthor();
-
-//        Book[] bookArray = new Book[3];
-//        bookArray[0] = new Book("Приключения", "Иванов И.И.", 2000);
-//        bookArray[1] = new Book("Словарь", "Сидоров А.В.", 1980);
-//        bookArray[2] = new Book("Энциклопедия", "Гусев К.В.", 2010);
-
-        //for(int i = 0; i<3; i++)
-           // System.out.println(bookArray[0]);
-
-
-
-        //System.out.println(book.author);
-        //System.out.println(book1.getInfoBook());
-//        System.out.println(reader1.getInfoReader());
-//
-//        reader1.takeBook(6,reader1.getFIO());
-//        reader1.returnBook(0,reader1.getFIO());
-//        phone1.setModel("iphone");
-//        phone1.setNumber("0991234567");
-//        phone2.setModel("pixel");
-//
-//
-//        System.out.println(phone1.getInfo());
-//    создавать массив примерно так:
-//    Reader[] readerArray = new Reader[4];
-//
-//    получать свойства и методы так:
-//    bookArray[1].getTitle()
-//    readerArray[3].takeBook(3);  - взять 3 книги
+       // book.getAuthor();
 
     }
 }
