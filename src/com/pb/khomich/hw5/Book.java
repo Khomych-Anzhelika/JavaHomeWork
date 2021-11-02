@@ -41,7 +41,9 @@ public class Book {
     }
 
     String getInfoBook() {
-        return "[название:" + name + ", автор: " + author +", год издания:" + year + "]";
+        return "[название:" + name + ", автор: " + author +", год издания:" + year + "г.]";
     }
-
+    String getInfoBook1() {
+        return name + " (" + author +", " + year + "г.)";
+    }
 }

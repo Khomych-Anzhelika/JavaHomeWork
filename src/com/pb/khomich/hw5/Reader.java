@@ -8,6 +8,8 @@
 
 package com.pb.khomich.hw5;
 
+import java.util.Arrays;
+
 public class Reader {
     private String FIO;
     private String numBilet;
@@ -85,17 +87,17 @@ public class Reader {
     //Выводит на консоль сообщение
     //"Петров В. В. взял книги: Приключения, Словарь, Энциклопедия".
 
-    public static void takeBook(String[]getName, String FIO) {
-
-        System.out.println(FIO + " взял книги: "+ Book.getName());
-
+    public static void takeBook(String name, String FIO) {
+        System.out.println(FIO + " взял книги: "+ name);
     }
-
 
     //- takeBook, который будет принимать переменное количество объектов класса Book.
     //Выводит на консоль сообщение
     //"Петров В. В. взял книги: Приключения (Иванов И. И. 2000 г.), Словарь (Сидоров А. В 1980 г.), Энциклопедия (Гусев К. В. 2010 г.)".
-
+    public static void takeBook(String[]book,String FIO) {
+        String arrBook = Arrays.toString(book);
+        System.out.println(FIO + " взял книги: "+ arrBook);
+    }
 
     //Аналогичным образом перегрузить метод returnBook().
     //Должно быть 3 метода returnBook() которые выводит на консоль сообщения:
@@ -110,18 +112,13 @@ public class Reader {
         }
     }
 //- "Петров В. В. вернул книги: Приключения, Словарь, Энциклопедия".
+        public static void returnBook(String name, String FIO) {
+            System.out.println(FIO + " вернул книги: "+ name);
+        }
 //- "Петров В. В. вернул книги: Приключения (Иванов И. И. 2000 г.), Словарь (Сидоров А. В 1980 г.), Энциклопедия (Гусев К. В. 2010 г.)".
+        public static void returnBook(String[]book,String FIO) {
+            String arrBook = Arrays.toString(book);
+            System.out.println(FIO + " взял книги: "+ arrBook);
+        }
 
-
-//
-//    public void receiveCall(String name) {
-//        System.out.println("Звонит " + name);
-//    }
-//
-//    public void receiveCall(String name, String number) {
-//        if (isCharged()) {
-//            System.out.println("Звонит " + name + ", c номера: " + number);
-//            batteryIndicator -= 20;
-//        }
-//    }
 }

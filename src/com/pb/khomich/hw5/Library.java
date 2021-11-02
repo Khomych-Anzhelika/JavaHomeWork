@@ -7,6 +7,8 @@
 
 package com.pb.khomich.hw5;
 
+import java.util.Arrays;
+
 public class Library {
     public static void main(String[] args) {
 //        Book book1 = new Book();
@@ -43,21 +45,20 @@ public class Library {
 
         for(int i = 0; i<bookArray.length; i++){
             arrayName[i] = bookArray[i].getName();
-            System.out.println(arrayName[i]);
         }
+        String nameBook = Arrays.toString(arrayName);
+        Reader.takeBook(nameBook,readerArray[2].getFIO());
+        Reader.returnBook(nameBook,readerArray[2].getFIO());
+        System.out.println("\n");
 
-        Reader.takeBook(arrayName[i],readerArray[0].getFIO());
+        String[] arr = new String[bookArray.length];
+        for(int i = 0; i< bookArray.length; i++){
+            arr[i] = bookArray[i].getInfoBook1();
+        }
+        //String arrBook = Arrays.toString(arr);
+        Reader.takeBook(arr,readerArray[1].getFIO());
+        Reader.returnBook(arr,readerArray[1].getFIO());
 
-
-        //String arrayNameStr = String.copyValueOf(arrayName); //преобразуем в нужный тип данных (String)
-
-        //System.out.println(arrayNameStr);
-        //System.out.println(book1);
-        //Reader.takeBook(, readerArray[2].getFIO());
-
-
-        //System.out.println(book1[0]);
-       // book.getAuthor();
 
     }
 }
