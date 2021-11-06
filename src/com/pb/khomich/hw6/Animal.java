@@ -10,14 +10,12 @@ package com.pb.khomich.hw6;
 + Добавьте переменные (поля) в классы Dog, Cat, Horse, характеризующие только этих животных.
 +Создайте класс Veterinarian (Ветеринар),
 +в котором определите метод void treatAnimal(Animal animal).
-Пусть этот метод печатает на экран food и location пришедшего на прием животного.
++Пусть этот метод печатает на экран food и location пришедшего на прием животного.
 +Создайте класс VetСlinic
 +в его методе main создайте массив типа Animal, в который
-запишите животных всех имеющихся у вас типов.
-В цикле отправляйте животных на прием к ветеринару.
++запишите животных всех имеющихся у вас типов.
++В цикле отправляйте животных на прием к ветеринару.
 В классах Dog, Cat, Horse переопределить методы toString, equals, hashCode.
-
-
 
 Объект класса Veterinarian создайте с помощью рефлексии.*/
 
@@ -27,9 +25,16 @@ public class Animal {
     private String location;
     private String name;
 
-    public Animal (String name){
+    public Animal (String name,String food, String location){
         this.name = name;
+        this.food = food;
+        this.location = location;
     }
+
+//    public Animal (String food, String location){
+//        this.food = food;
+//        this.location = location;
+//    }
 
     public String getName() {
         return name;

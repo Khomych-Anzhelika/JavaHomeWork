@@ -5,8 +5,14 @@ public class Cat extends Animal{
     private int purrLevel; //уровень мурчания
 
     public Cat(){
-        super("Кошка");
+        super("Кошка","рыбка","дом");
     }
+
+//    public Cat(String food, String location){
+//        //super(food,location);
+//        super("рыбка","дом");
+//
+//    }
 
     public int getPurrLevel() {
         return purrLevel;

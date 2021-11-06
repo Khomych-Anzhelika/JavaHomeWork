@@ -5,8 +5,12 @@ public class Horse extends Animal{
     private int age; //Возраст
 
     public Horse(){
-        super("Лошадь");
+        super("Лошадь","овес","загон");
     }
+
+//    public Horse(String food, String location){
+//        super("овес","загон");
+//    }
 
     public int getSpeed() {
         return speed;
@@ -33,6 +37,6 @@ public class Horse extends Animal{
     @Override
     public void eat() {
         super.eat();
-        System.out.println("Конечно овес!");
+        System.out.println("Конечно сено!");
     }
 }

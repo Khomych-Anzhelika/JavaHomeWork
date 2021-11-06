@@ -5,8 +5,14 @@ public class Dog extends Animal{
     private String vaccinated; //вакцинированная (Y/N)
 
     public Dog(){
-        super("Собака");
+        super("Собака","мясо","будка");
     }
+
+//    public Dog(String food, String location){
+//        //super(food,location);
+//        super("мясо","будка");
+//
+//    }
 
     public String getPedigree() {
         return pedigree;

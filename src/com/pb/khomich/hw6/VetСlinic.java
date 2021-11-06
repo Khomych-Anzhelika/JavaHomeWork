@@ -6,26 +6,12 @@ package com.pb.khomich.hw6;
 
 public class VetСlinic {
     public static void main(String[] args) {
-        Animal[] animals = new Animal[]{new Dog(),new Cat(), new Horse()};
-        //Animal[1] = new Dog();
-//        animals.setName("Кошка");
-//        animals.eat();
+        Animal[] animals = new Animal[]{new Dog(),
+                                        new Cat(),
+                                        new Horse()};
+
         for(Animal c: animals ) {
-           // Veterinarian.treatAnimal(c);
-            //System.out.println(animals[i].getName());
-            c.makeNoise();
+            Veterinarian.treatAnimal(c);
         }
-
-        //Veterinarian.treatAnimal(animals[1]);
-        //Dog dogs = new Dog();
-        //Animal[1] = "Кошка";
-        //dogs.setName("Собака");
-        //dogs.eat();
-
-//        Veterinarian.treatAnimal();
-
-        //Animal[1] = "Кошка";
-//        animals.setName("Лошадь");
-//        animals.eat();
     }
 }
