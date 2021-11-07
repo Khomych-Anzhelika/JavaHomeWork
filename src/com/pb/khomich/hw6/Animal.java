@@ -15,7 +15,7 @@ package com.pb.khomich.hw6;
 +в его методе main создайте массив типа Animal, в который
 +запишите животных всех имеющихся у вас типов.
 +В цикле отправляйте животных на прием к ветеринару.
-В классах Dog, Cat, Horse переопределить методы toString, equals, hashCode.
++В классах Dog, Cat, Horse переопределить методы toString, equals, hashCode.
 
 Объект класса Veterinarian создайте с помощью рефлексии.*/
 

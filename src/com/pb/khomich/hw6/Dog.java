@@ -1,5 +1,7 @@
 package com.pb.khomich.hw6;
 
+import java.util.Objects;
+
 public class Dog extends Animal{
     private String pedigree; //среда обитания
     private String vaccinated; //вакцинированная (Y/N)
@@ -7,12 +9,6 @@ public class Dog extends Animal{
     public Dog(){
         super("Собака","мясо","будка");
     }
-
-//    public Dog(String food, String location){
-//        //super(food,location);
-//        super("мясо","будка");
-//
-//    }
 
     public String getPedigree() {
         return pedigree;
@@ -40,5 +36,26 @@ public class Dog extends Animal{
     public void eat() {
         super.eat();
         System.out.println("Конечно мяско!");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dog dog = (Dog) o;
+        return Objects.equals(pedigree, dog.pedigree) && Objects.equals(vaccinated, dog.vaccinated);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pedigree, vaccinated);
+    }
+
+    @Override
+    public String toString() {
+        return "Dog{" +
+                "pedigree='" + pedigree + '\'' +
+                ", vaccinated='" + vaccinated + '\'' +
+                '}';
     }
 }
