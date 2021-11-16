@@ -1,6 +1,7 @@
 package com.pb.khomich.hw7;
 
 public interface ManClothes {
-    void dressMan ();
-
+    default void dressMan() {
+        System.out.println("Одеваем мужчину");
+    }
 }

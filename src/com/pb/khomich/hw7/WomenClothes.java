@@ -1,5 +1,7 @@
 package com.pb.khomich.hw7;
 
 public interface WomenClothes {
-    void dressWomen ();
+    default void dressWomen() {
+        System.out.println("Одеваем женщину");
+    }
 }
