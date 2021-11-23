@@ -4,33 +4,15 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 public class FileNumbers {
-    
+
     public static void main(String[] args) {
         createNumbersFile();
-        //  createOddNumbersFile();
-
-        //Path path = Paths.get("C:/Users/User/Desktop/Java/JavaHomeWork/hw9_file.txt");
-        int[] array = new int[100];
-
-        // Creates a reader using the FileReader
-        try (Reader reader = new FileReader("C:/Users/User/Desktop/Java/JavaHomeWork/hw9_file.txt")) {
-
-            // Checks if reader is ready
-            System.out.println("Is there data in the stream?  " + reader.ready());
-
-            // Reads characters
-            reader.read(array);
-            System.out.println("Data in the stream:");
-            System.out.println(array);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        createOddNumbersFile();
     }
+
     public static void createNumbersFile() {
 
         int[][] array = new int[10][10];
@@ -44,7 +26,7 @@ public class FileNumbers {
             }
         }
 
-        Path path = Paths.get("C:/Users/User/Desktop/Java/JavaHomeWork/hw9_file.txt");
+        Path path = Paths.get("C:/Users/User/Desktop/Java/JavaHomeWork/numbers.txt");
 
         try (BufferedWriter writer = Files.newBufferedWriter(path)) {
             for (int i = 0; i < 10; i++) {
@@ -63,26 +45,60 @@ public class FileNumbers {
     и создает на основе него новый файл "odd-numbers.txt"
     в который входят все числа из "numbers.txt" только все четные заменены на 0.
      */
-//    private static void createOddNumbersFile() {
-//
-//        Path path = Paths.get("C:/Users/User/Desktop/Java/JavaHomeWork/hw9_file.txt");
-//
-//        try (BufferedReader reader = Files.newBufferedReader(path)) {
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                int[] numArr = Arrays.stream(line.split(" ")).mapToInt(Integer::parseInt).toArray();
-//                for (int i = 0; i< numArr.length; i++) {
-//                    if (numArr[i]%2==0) {
-//                        numArr[i] = 0;
-//                    }
-//                }
-//                String sorted1 = String.valueOf(numArr); //преобразуем в нужный тип данных (String)
-//                System.out.println(sorted1);
-//            }
-//
-//        } catch (Exception ex) {
-//            System.out.println("Error with file read: " + ex);
-//        }
-//        System.out.println("Read from file done!");
-//    }
+    private static void createOddNumbersFile() {
+        int [][] arr = new int[10][10];
+
+        try
+        {
+            Scanner sc = new Scanner(new File("C:/Users/User/Desktop/Java/JavaHomeWork/numbers.txt"));
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    arr[i][j] = sc.nextInt();
+                    System.out.println(arr[i][j]);
+
+                }
+            }
+            sc.close();
+            System.out.println("read()'s ending");
+        }
+        catch (FileNotFoundException e)
+        {
+            System.out.println("Sorry, File not found!");
+        }
+        catch (InputMismatchException e)
+        {
+            System.out.println("Sorry, InputMismatchException");
+        }
+
+        //заменяем четное число на 0
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++) {
+                if (arr[i][j] % 2 == 0) {
+                    arr[i][j] = 0;
+                }
+            }
+        }
+
+        //выводим в файл массив
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("C:/Users/User/Desktop/Java/JavaHomeWork/odd-numbers.txt"));
+            for (int i = 0; i < arr.length; i++) {
+                for (int j = 0; j < arr[0].length; j++) {
+                    bw.write(String.valueOf(arr[i][j]));
+                    bw.write(" ");
+                }
+                bw.newLine();
+            }
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
+
+
+
