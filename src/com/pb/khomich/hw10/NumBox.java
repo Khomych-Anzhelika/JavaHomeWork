@@ -9,6 +9,7 @@ public class NumBox <T extends Number> {
         numbers = (T[]) new Number[size];
     }
 
+    //- метод T get(int index) возвращающий число по индексу.
     public T get(int index) {
         return numbers[index];
     }
@@ -21,9 +22,35 @@ public class NumBox <T extends Number> {
             } else
                 this.numbers[index] = num;
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Вы превысили длину массива");// + length());
+            System.out.println("Вы превысили длину массива");
         }
     }
 
+    public int length() {
+        return numbers.length;
+    }
 
+    // метод double  - сумма всех элементов массива.
+    public double sum(){
+        double sum = 0.0;
+        for (T num : numbers){
+            sum += num.doubleValue();
+        }
+        return sum;
+    }
+    //- метод double average() - подсчет среднего арифметического среди элементов массива.
+    public double average() {
+        return sum() / length();
+    }
+
+     //- метод T max() - максимальный элемент массива.
+    public T max() {
+        T maxEl = numbers[0];
+        for (T number : numbers) {
+            if (number.doubleValue() > maxEl.doubleValue()) {
+                maxEl = number;
+            }
+        }
+        return maxEl;
+    }
 }
