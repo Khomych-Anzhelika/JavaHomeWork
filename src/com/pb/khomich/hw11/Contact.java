@@ -77,4 +77,5 @@ public class Contact {
                 ", dateOfEditing=" + dateOfEditing +
                 '}';
     }
+
 }

@@ -6,16 +6,12 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class Main {
     /*
     Обеспечить следующий функционал:
-    добавление элемента
-    удаление элемента
     поиск элементов
     вывод всех записей с сортировкой по указанному полю (можно ограничиться двумя на выбор)
     редактирование элемента
@@ -47,8 +43,6 @@ public class Main {
 
             if (menu == 1) {
                 System.out.println("Ну что создадим пользователя?");
-                List<String> phone1 = Arrays.asList("0638812381", "0994015432");
-                Contact person = new Contact("Смирнов Артур Петрович", LocalDate.of(2000, 2, 12), phone1, "Днепр, улица Красная 119");
                 try {
                     //Вывод данных
                     Scanner scanAdd = new Scanner(System.in);
@@ -73,17 +67,46 @@ public class Main {
                 } catch (Exception ex) {
                     System.out.println("Ошибка добавления данных." + ex);
                 }
-                System.out.println("Кол-во контактов:" + contacts.size());
-               // System.out.println(contacts);
+                System.out.println("Кол-во контактов в телефонной книге:" + contacts.size());
             }
             if (menu == 2) {
-                System.out.println("Удалим контакт");
+                try {
+                    Scanner scanAdd = new Scanner(System.in);
+                    System.out.println("Удаление по ФИО, введите данные:");
+                    String delFio = scanAdd.nextLine();
+                    if (contacts.removeIf(cs -> Objects.equals(cs.getFIO(), delFio))
+                    ) {
+                        System.out.println("Удаление выполнено.");
+                    } else System.out.println("Контакты для удаления не найдены.");
+                    System.out.println("Кол-во контактов в телефонной книге:" + contacts.size());
+
+                } catch (Exception ex) {
+                    System.out.println("Ошибка удаления данных." + ex);
+                }
+                continue;
+            }
+            if (menu == 3) {
+                try{
+                Scanner scanAdd = new Scanner(System.in);
+                System.out.println("Поиск по ФИО, введите данные:");
+                String foundFio = scanAdd.nextLine();
+                int qtyElem = 0;
+
+                for (int i = 0; i < contacts.size(); i++) {
+                    boolean res = foundFio.equals(contacts.get(i).getFIO());
+                        if (res == true) {
+                            qtyElem++;
+                            contacts.get(i).toString();
+                        } else System.out.println("Контакты не найдены.");
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Ошибка поиска данных." + ex);
+                }
+                continue;
 
 
-
-            } else if (menu == 3) {
-                System.out.println("Поиск");
-            } else if (menu == 4) {
+            }
+            if (menu == 4) {
                 System.out.println("Вывод всех записей с сортировкой");
                 System.out.println("По номеру телефона - 1");
                 System.out.println("По номеру телефона - 1");
