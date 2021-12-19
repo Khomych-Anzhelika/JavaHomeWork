@@ -11,15 +11,13 @@ import java.util.function.Predicate;
 
 public class Main {
     /*
-    Обеспечить следующий функционал:
-    поиск элементов
-    вывод всех записей с сортировкой по указанному полю (можно ограничиться двумя на выбор)
     редактирование элемента
     запись в файл всех данных
     загрузка из файла всех данных
     */
     static int ChoiceMenu() {
         Scanner scan = new Scanner(System.in);
+        System.out.println("\n");
         System.out.println("Для добавления контакта нажмите         - 1");
         System.out.println("Для удаления контакта нажмите           - 2");
         System.out.println("Для поиска нажмите                      - 3");
@@ -38,6 +36,14 @@ public class Main {
         int start = 0;
         ArrayList<Contact> contacts = new ArrayList<>();
         System.out.println("Добро пожаловать в телефонную книгу:");
+
+        List<String> phons1 = Arrays.asList("0638812381");
+        List<String> phons2 = Arrays.asList("0994015432", "0662547896");
+        List<String> phons3 = Arrays.asList("0567655702");
+        contacts.add(new Contact("Хомич Анжелика Александровна", LocalDate.of(1992, 8, 20), phons1, "г.Днепр"));
+        contacts.add(new Contact("Сидоров С.С.", LocalDate.of(1987, 5, 15), phons2, "г.Харьков"));
+        contacts.add(new Contact("Гаврильченко Андрей", LocalDate.of(1988, 7, 15), phons3, "г. Обуховка"));
+
         while (start == 0) {
             int menu = ChoiceMenu();
 
@@ -96,32 +102,82 @@ public class Main {
                     boolean res = foundFio.equals(contacts.get(i).getFIO());
                         if (res == true) {
                             qtyElem++;
-                            contacts.get(i).toString();
+                            contacts.get(i).info();
                         } else System.out.println("Контакты не найдены.");
                     }
                 } catch (Exception ex) {
                     System.out.println("Ошибка поиска данных." + ex);
                 }
                 continue;
-
-
             }
             if (menu == 4) {
-                System.out.println("Вывод всех записей с сортировкой");
-                System.out.println("По номеру телефона - 1");
-                System.out.println("По номеру телефона - 1");
-
-
-                //вывод всех записей с сортировкой по указанному полю (можно ограничиться двумя на выбор)
-
+                try {
+                    Scanner scan = new Scanner(System.in);
+                    System.out.println("Вывод всех записей с сортировкой");
+                    System.out.println("По дате рождения - 1");
+                    System.out.println("По ФИО - 2");
+                    System.out.println("Выберете нужный вид сортировки:");
+                    int sort = scan.nextInt(); //значение нужного действия
+                    if (sort == 1) {
+                        contacts.sort(Comparator.comparing(c -> c.getDateOfBirth()));
+                        System.out.println("Список контактов по дате рождения:");
+                        for (int i = 0; i < contacts.size(); i++) {
+                            contacts.get(i).info();
+                        }
+                        continue;
+                    }
+                    if (sort == 2){
+                        contacts.sort(Comparator.comparing(c -> c.getFIO()));
+                        System.out.println("Список контактов по ФИО:");
+                        for (int i = 0; i < contacts.size(); i++) {
+                            contacts.get(i).info();
+                        }
+                        continue;
+                    }
+                    if (sort > 2) {
+                        System.out.println("Выбран неверный код сортировки");
+                    }
+                }catch (Exception ex) {
+                    System.out.println("Ошибка сортировки данных." + ex);
+                }
+                continue;
             } else if (menu == 5) {
-                System.out.println("Редактирование");
+                System.out.println("Редактирование котакта");
+                if (contacts.isEmpty()) {
+                    System.out.println("Ваша телефонная книга пуста");
+                } else {
+                    for (int i = 0; i < contacts.size(); i++) {
+
+                        System.out.println("#" + (i + 1) + " " + contacts.get(i).info());
+                        System.out.println("Старое имя " + contacts.get(i-1).getFirstName());
+
+                    }
+                    System.out.println();
+                }
+
+
             } else if (menu == 6) {
+                try{
                 System.out.println("Выгрузка");
+                File file = Paths.get("C:/Users/User/Desktop/Java/JavaHomeWork/Contact.data").toFile();
+                FileOutputStream outputStream = new FileOutputStream(file);
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
+                // сохраняем в файл
+                objectOutputStream.writeObject(contacts);
+
+                //закрываем поток и освобождаем ресурсы
+                objectOutputStream.close();
+                }
+                catch (Exception ex) {
+                    System.out.println("Ошибка выгрузки данных" + ex);
+                }
+                continue;
             } else if (menu == 7) {
                 System.out.println("Загрузка");
             } else if (menu == 8) {
-                System.out.println("Выход");
+                System.out.println("До новых встреч");
+                break;
             } else if (menu > 8)
                 System.out.println("Ошибка выбора. Данное меню недоступно");
 
@@ -129,23 +185,4 @@ public class Main {
     }
 
     }
-
-                //File file = Paths.get("files/person.data").toFile();
-                //FileOutputStream outputStream = new FileOutputStream(file);
-                //ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-
-            /*Contact person = new Contact("Семенов Андрей Константинович",
-                                         LocalDate.of(1987,07,14),
-                                         ["0638812381","0951689632"], "Днепр, ул. Красная 8")   ;*/
-          /*  person.setDog(new Dog("Rex"));
-            List<Person> list = new ArrayList<>();
-            list.add(person);
-            list.add(new Person("Jack", "0991244566", LocalDate.now()));
-
-
-            // сохраняем в файл
-            objectOutputStream.writeObject(list);
-
-            //закрываем поток и освобождаем ресурсы
-            objectOutputStream.close();*/
 

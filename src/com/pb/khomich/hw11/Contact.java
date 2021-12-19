@@ -67,15 +67,14 @@ public class Contact {
         this.dateOfEditing = LocalDateTime.now();
     }
 
-    @Override
-    public String toString() {
-        return "Contact{" +
+    public void info() {
+        System.out.println("Contact{" +
                 "FIO='" + FIO + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", phone=" + phone +
                 ", adres='" + adres + '\'' +
                 ", dateOfEditing=" + dateOfEditing +
-                '}';
+                '}');
     }
 
 }
