@@ -1,13 +1,21 @@
 package com.pb.khomich.hw11;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.Predicate;
+
+
 
 public class Main {
     /*
@@ -229,28 +237,74 @@ public class Main {
                 continue;
             }
             if (menu == 6) {
-                    try {
-                        System.out.println("Выгрузка");
-                        File file = Paths.get("C:/Users/User/Desktop/Java/JavaHomeWork/Contact.data").toFile();
-                        FileOutputStream outputStream = new FileOutputStream(file);
-                        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                ObjectMapper mapper = new ObjectMapper();
+                // pretty printing (json с отступами)
+                mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-                        // сохраняем в файл
-                        objectOutputStream.writeObject(contacts);
+                // для работы с полями типа LocalDate
+                SimpleModule module = new SimpleModule();
+                module.addSerializer(LocalDate.class, new LocalDateSerializer());
+                module.addDeserializer(LocalDate.class, new LocalDateDeserializer());
+                mapper.registerModule(module);
 
-                        //закрываем поток и освобождаем ресурсы
-                        objectOutputStream.close();
-                    } catch (Exception ex) {
-                        System.out.println("Ошибка выгрузки данных" + ex);
+                String contactsJsonWrite = mapper.writeValueAsString(contacts);
+                mapper.readValue(contactsJsonWrite, new TypeReference<List<Contact>>() {});
+                //Локальный путь к файлу в проекте для выгрузки данных
+                Path pathWrite = Paths.get("C:/Users/User/Desktop/Java/JavaHomeWork/export.json");
+
+                try (BufferedWriter writer = Files.newBufferedWriter(pathWrite)) {
+                    writer.write(contactsJsonWrite);
+                } catch (Exception ex) {
+                    System.out.println("Ошибка выгрузки данных: " + ex);
+                }
+                  System.out.println("Выгрузка успешно завершена.");
+                continue;
+                }
+            if (menu == 7) {
+                ObjectMapper mapper = new ObjectMapper();
+                // pretty printing (json с отступами)
+                mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+                // для работы с полями типа LocalDate
+                SimpleModule module = new SimpleModule();
+                module.addSerializer(LocalDate.class, new LocalDateSerializer());
+                module.addDeserializer(LocalDate.class, new LocalDateDeserializer());
+                mapper.registerModule(module);
+
+                //Локальный путь к файлу в проекте для загрузки данных
+                Path pathLoad = Paths.get("files/import.json");
+                String contactsJsonRead = new String();
+
+                try (BufferedReader reader = Files.newBufferedReader(pathLoad)) {
+                    String line = null;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String ls = System.getProperty("line.separator");
+                    while ((line = reader.readLine()) != null) {
+                        stringBuilder.append(line);
+                        stringBuilder.append(ls);
                     }
-                    continue;
-                } else if (menu == 7) {
-                    System.out.println("Загрузка");
+                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                    contactsJsonRead = stringBuilder.toString();
 
-                } else if (menu == 8) {
+                } catch (Exception ex) {
+                    System.out.println("Ошибка загрузки данных: " + ex);
+                }
+                //Преобразовываем String в Contact
+                ArrayList<Contact> contactsImport = mapper.readValue(contactsJsonRead, new TypeReference<ArrayList<Contact>>() {});
+                System.out.println("Загрузка успешно завершена.");
+
+                for (int i = 0; i < contactsImport.size(); i++) {
+                    Contact addContact = new Contact(contactsImport.get(i).getFIO(),
+                                                    contactsImport.get(i).getDateOfBirth(),
+                                                    contactsImport.get(i).getPhone(),
+                                                    contactsImport.get(i).getAdres());
+                    contacts.add(addContact);
+                }
+            }
+                if (menu == 8) {
                     System.out.println("До новых встреч");
-                    break;
-                } else if (menu > 8)
+                    break;}
+                if (menu > 8)
                     System.out.println("Ошибка выбора. Данное меню недоступно");
 
             }

@@ -1,6 +1,5 @@
 package com.pb.khomich.hw11;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,8 +16,8 @@ public class Contact {
     private String adres; //адрес
     private transient LocalDateTime dateOfEditing = LocalDateTime.now(); //время записи редактирования
 
-   /* public Contact() {
-    }*/
+    public Contact() {
+    }
 
     public Contact(String FIO, LocalDate dateOfBirth, List<String> phone, String adres) {
         this.FIO = FIO;
