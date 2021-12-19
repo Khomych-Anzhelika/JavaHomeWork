@@ -148,8 +148,8 @@ public class Main {
                 } else {
                     for (int i = 0; i < contacts.size(); i++) {
 
-                        System.out.println("#" + (i + 1) + " " + contacts.get(i).info());
-                        System.out.println("Старое имя " + contacts.get(i-1).getFirstName());
+                        //System.out.println("#" + (i + 1) + " " + contacts.get(i).info());
+                        //System.out.println("Старое имя " + contacts.get(i-1).getFirstName());
 
                     }
                     System.out.println();
