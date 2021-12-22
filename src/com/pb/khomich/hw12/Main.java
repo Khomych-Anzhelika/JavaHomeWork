@@ -124,19 +124,28 @@ public class Main {
                     System.out.println("Выберете нужный вид сортировки:");
                     int sort = scan.nextInt(); //значение нужного действия
                     if (sort == 1) {
-                        contacts.sort(Comparator.comparing(c -> c.getDateOfBirth()));
+                        //contacts.sort(Comparator.comparing(c -> c.getDateOfBirth()));
                         System.out.println("Список контактов по дате рождения:");
-                        for (int i = 0; i < contacts.size(); i++) {
+                        /*for (int i = 0; i < contacts.size(); i++) {
                             contacts.get(i).info();
-                        }
+                        }*/
+                        //изменила на использование стрима
+                        contacts.stream()
+                                .sorted(Comparator.comparing(Contact::getDateOfBirth))
+                                .forEach(System.out::println);
                         continue;
                     }
+
                     if (sort == 2) {
-                        contacts.sort(Comparator.comparing(c -> c.getFIO()));
+                        //contacts.sort(Comparator.comparing(c -> c.getFIO()));
                         System.out.println("Список контактов по ФИО:");
-                        for (int i = 0; i < contacts.size(); i++) {
+                        /*for (int i = 0; i < contacts.size(); i++) {
                             contacts.get(i).info();
-                        }
+                        }*/
+                        //изменила на использование стрима
+                        contacts.stream()
+                                .sorted(Comparator.comparing(Contact::getFIO))
+                                .forEach(System.out::println);
                         continue;
                     }
                     if (sort > 2) {
