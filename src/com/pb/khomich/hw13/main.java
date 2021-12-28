@@ -20,6 +20,18 @@ import java.util.List;
 import java.util.Random;
 
 public class main {
+    public static void main(String[] strings) throws InterruptedException {
+        List<Integer> sharedList = new ArrayList<Integer>();
+        int size = 5;
+        Thread prodThread = new Thread(new Producer(sharedList, size), "Producer");
+      //  sharedList.add(2);
+
+        Thread consThread = new Thread(new Consumer(sharedList, size), "Consumer");
+        System.out.println("Запуск");
+        prodThread.start();
+        consThread.start(); //ВОПРОС если закоментить, то сначала наполняеются все элементы массива....а если раскоментить, то по одному выполнению, почему так что упускаю?
+
+    }
     //***********************************************************************
     // implements Runnable чтобы запускать в отдельном потоке
     static class Producer implements Runnable {
@@ -36,12 +48,12 @@ public class main {
 
         @Override
         public void run() {
-            // Цикл бесконечен
-          //  while (true) {
-            for (int i = 0; i < 15; i++) {
+            while (true) {
+           // for (int i = 0; i < 15; i++) {
                 try {
                     // В цикле вызывается метод produce
                     System.out.println("Производим: " + produce());
+                    System.out.println(sharedList);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -61,10 +73,9 @@ public class main {
                 Integer newValue = random.nextInt(1000); //загаданное число программой
                 sharedList.add(newValue);
 
-
                 // Уведомили другой поток на случай, если он ждет
                 sharedList.notify();
-                //Thread.sleep(1000);
+                Thread.sleep(1000);
                 return newValue;
             }
         }
@@ -74,15 +85,18 @@ public class main {
     static class Consumer implements Runnable {
         // Общая очередь
         private final List<Integer> sharedList;
+        private final int SIZE;
 
-        public Consumer(List<Integer> sharedQueue) {
-            this.sharedList = sharedQueue;
+
+        public Consumer(List<Integer> sharedList, int size){
+            this.sharedList = sharedList;
+            this.SIZE = size;
+
         }
 
         @Override
         public void run() {
             while (true) {
-
                 try {
                     System.out.println("Покупаем: " + consume());
                 } catch (InterruptedException ex) {
@@ -94,28 +108,19 @@ public class main {
         // Метод, извлекающий элементы из общей очереди
         private Integer consume() throws InterruptedException {
             synchronized (sharedList) {
-                if (sharedList.isEmpty()) { // Если пуста, надо ждать
-                    sharedList.wait();
+                while (sharedList.isEmpty()) { // Если пуста, надо ждать
                     System.out.println("Ждем когда произведут");
+                    sharedList.wait();
                 }
 
                 Integer position = sharedList.get(0);
                 sharedList.remove(0);
 
-                sharedList.notifyAll();
+                sharedList.notify();
                 Thread.sleep(1000); //ВОПРОС если закоментить этот вариант, почему-то местами покупает раньше, чем вывелось произведено, почему
 
                 return position;
             }
         }
-    }
-    public static void main(String[] strings) throws InterruptedException {
-        List<Integer> sharedList = new ArrayList<Integer>();
-        int size = 5;
-        Thread prodThread = new Thread(new Producer(sharedList, size), "Producer");
-        Thread consThread = new Thread(new Consumer(sharedList), "Consumer");
-        System.out.println("Запуск");
-        prodThread.start();
-        consThread.start();
     }
 }
