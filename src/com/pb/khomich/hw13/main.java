@@ -2,12 +2,10 @@ package com.pb.khomich.hw13;
 
 /*Создать пакет hw13.
 Написать программу решающую классическую задачу производитель и потребитель.
-
 Два потока разделяют общий буфер данных, размер которого ограничен, например не больше 5
 элементов.
 Производитель генерирует некоторые данные (можно выбрать любые, числа, символы, строки)
 и помещает их в буфер.
-
 Потребитель «потребляет» их из буфера - выводит на печать в консоль и очищает буфер.
 Если буфер пуст, потребитель должен ждать, пока там появятся данные.
 Если буфер заполнен полностью, производитель должен ждать, пока потребитель заберёт
@@ -24,13 +22,21 @@ public class main {
         List<Integer> sharedList = new ArrayList<Integer>();
         int size = 5;
         Thread prodThread = new Thread(new Producer(sharedList, size), "Producer");
-      //  sharedList.add(2);
+        //  sharedList.add(2);
+       // System.out.println("Запуск потока Производитель");
+        prodThread.start();
 
         Thread consThread = new Thread(new Consumer(sharedList, size), "Consumer");
-        System.out.println("Запуск");
-        prodThread.start();
+       // System.out.println("Запуск потока Покупатель");
         consThread.start(); //ВОПРОС если закоментить, то сначала наполняеются все элементы массива....а если раскоментить, то по одному выполнению, почему так что упускаю?
 
+    }
+
+    public class ConsoleColors {
+        public static final String ANSI_RESET = "\u001B[0m";
+        public static final String ANSI_RED = "\u001B[31m";
+        public static final String ANSI_YELLOW = "\u001B[33m";
+        public static final String ANSI_BLUE = "\u001B[34m";
     }
     //***********************************************************************
     // implements Runnable чтобы запускать в отдельном потоке
@@ -49,11 +55,11 @@ public class main {
         @Override
         public void run() {
             while (true) {
-           // for (int i = 0; i < 15; i++) {
+               //  for (int i = 0; i < 15; i++) {
                 try {
                     // В цикле вызывается метод produce
-                    System.out.println("Производим: " + produce());
-                    System.out.println(sharedList);
+                    System.out.println(ConsoleColors.ANSI_RED + "Производим: " + produce() +  ConsoleColors.ANSI_RESET);
+                    System.out.println(ConsoleColors.ANSI_YELLOW + sharedList + ConsoleColors.ANSI_RESET);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -65,6 +71,7 @@ public class main {
                 while (sharedList.size() == SIZE) {
                     // Если очередь полна, то ждём
                     System.out.println("Ждем когда купят");
+                    sharedList.notify(); //версия 2.0 теперь отрабатывает все ок
                     sharedList.wait();
                 }
 
@@ -74,8 +81,8 @@ public class main {
                 sharedList.add(newValue);
 
                 // Уведомили другой поток на случай, если он ждет
-                sharedList.notify();
-                Thread.sleep(1000);
+                //sharedList.notify(); //версия 2.0
+                //Thread.sleep(1000);  //версия 2.0
                 return newValue;
             }
         }
@@ -98,7 +105,8 @@ public class main {
         public void run() {
             while (true) {
                 try {
-                    System.out.println("Покупаем: " + consume());
+                    System.out.println(ConsoleColors.ANSI_BLUE + "Покупаем: " + consume() + ConsoleColors.ANSI_RESET);
+                    System.out.println(ConsoleColors.ANSI_YELLOW + sharedList + ConsoleColors.ANSI_RESET);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
@@ -110,14 +118,15 @@ public class main {
             synchronized (sharedList) {
                 while (sharedList.isEmpty()) { // Если пуста, надо ждать
                     System.out.println("Ждем когда произведут");
+                    sharedList.notify();//версия 2.0
                     sharedList.wait();
                 }
 
                 Integer position = sharedList.get(0);
                 sharedList.remove(0);
 
-                sharedList.notify();
-                Thread.sleep(1000); //ВОПРОС если закоментить этот вариант, почему-то местами покупает раньше, чем вывелось произведено, почему
+                //sharedList.notify(); //версия 2.0
+                //Thread.sleep(1000); //версия 2.0, ВОПРОС если закоментить этот вариант, почему-то местами покупает раньше, чем вывелось произведено, почему
 
                 return position;
             }
