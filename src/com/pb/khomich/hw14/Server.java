@@ -1,56 +1,63 @@
 package com.pb.khomich.hw14;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
 public class Server {
-    static ExecutorService executeIt = Executors.newFixedThreadPool(2);
 
-    public static void main(String[] args) {
+    static class Handler implements Runnable {
+        private final Socket socket;
 
-        // стартуем сервер на порту 1777 и инициализируем переменную для обработки консольных команд с самого сервера
-        try (ServerSocket server = new ServerSocket(1777);
-             BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-            // стартуем цикл при условии что серверный сокет не закрыт
-            while (!server.isClosed()) {
+        public Handler(Socket socket) {
+            this.socket = socket;
+        }
 
-                // проверяем поступившие комманды из консоли сервера если такие
-                // были
-                if (br.ready()) {
-                    // если команда - exit то инициализируем закрытие сервера и
-                    // выход из цикла раздачии нитей монопоточных серверов
-                    String serverCommand = br.readLine();
-                    if (serverCommand.equalsIgnoreCase("exit")) {
-                        System.out.println("Main Server initiate exiting...");
-                        server.close();
+        @Override
+        public void run() {
+            try {
+                System.out.println(Thread.currentThread().getName() + ": Customer request received");
+
+                BufferedReader in  = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                PrintWriter    out = new PrintWriter(socket.getOutputStream(), true);
+
+                String clientMessage;
+                System.out.println("Waiting for messages");
+                while ((clientMessage = in.readLine()) != null) {
+                    if ("Close".equalsIgnoreCase(clientMessage)) {
                         break;
                     }
+                    out.println("Server: "+ (LocalDateTime.now().toString()) + " " + clientMessage);
+                    System.out.println(Thread.currentThread().getName() + " -> " + clientMessage);
                 }
-
-                // если комманд от сервера нет то становимся в ожидание
-                // подключения к сокету общения под именем - "clientDialog" на
-                // серверной стороне
-                Socket client = server.accept();
-
-                // после получения запроса на подключение сервер создаёт сокет
-                // для общения с клиентом и отправляет его в отдельную нить
-                // в Runnable(при необходимости можно создать Callable)
-                // монопоточную нить = сервер - MonoThreadClientHandler и тот
-                // продолжает общение от лица сервера
-                executeIt.execute(new MonoThreadClientHandler(client));
-                System.out.print("Connection accepted.");
+                System.out.println("Closing the client connection in the stream: " + Thread.currentThread().getName());
+                out.close();
+                in.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                try {
+                    socket.close();
+                } catch (Exception ex) {
+                    // ignore
+                }
             }
+        }
+    }
 
-            // закрытие пула нитей после завершения работы всех нитей
-            executeIt.shutdown();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void main(String[] args) throws Exception {
+        int port = 1234;
+        ServerSocket serverSocket = new ServerSocket(port);
+        System.out.println("Server started: " + port);
+        ExecutorService threadPool = Executors.newFixedThreadPool(10);
+
+        // В цикле ждем запроса клиента
+        while (true) {
+            Socket clientSocket = serverSocket.accept();
+            threadPool.submit(new Handler(clientSocket));
         }
     }
 }

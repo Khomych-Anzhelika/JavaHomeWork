@@ -1,68 +1,37 @@
 package com.pb.khomich.hw14;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
-public class Client implements Runnable {
+public class Client {
+    public static void main(String[] args) throws Exception {
+        System.out.println("Client start");
+        String serverIp = "127.0.0.1";
+        int serverPort  = 1234;
+        System.out.println("Connecting to the server " + serverIp + ":" + serverPort);
 
-	static Socket socket;
+        Socket server            = new Socket(serverIp, serverPort);
+        BufferedReader inServer  = new BufferedReader(new InputStreamReader(server.getInputStream()));
+        PrintWriter outServer    = new PrintWriter(server.getOutputStream(), true);
+        BufferedReader inConsole = new BufferedReader(new InputStreamReader(System.in));
 
-	public Client() {
-		try {
-
-			// создаём сокет общения на стороне клиента в конструкторе объекта
-			socket = new Socket("localhost", 1777);
-			System.out.println("Участник вошел в чат");
-			Thread.sleep(2000);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void run() {
-
-		try (
-			DataOutputStream oos = new DataOutputStream(socket.getOutputStream());
-			DataInputStream ois = new DataInputStream(socket.getInputStream())) {
-
-			int i = 0;
-			// создаём рабочий цикл
-			while (i < 5) {
-				Scanner scanAdd = new Scanner(System.in);
-				System.out.println("Введите сообщение:");
-				String txt = scanAdd.nextLine();
-				// пишем сообщение автогенерируемое циклом клиента в канал
-				// сокета для сервера
-				oos.writeUTF("Пользователь написал: " + txt);
-				// проталкиваем сообщение из буфера сетевых сообщений в канал
-				oos.flush();
-
-				// ждём чтобы сервер успел прочесть сообщение из сокета и
-				// ответить
-				Thread.sleep(10);
-				System.out.println("Client wrote & start waiting for data from server...");
-
-				// забираем ответ из канала сервера в сокете
-				// клиента и сохраняемеё в ois переменную, печатаем на
-				// консоль
-				System.out.println("reading...");
-				String in = ois.readUTF();
-				System.out.println(in);
-				i++;
-				Thread.sleep(5000);
-
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
+        String dataFromUser, dataFromServer;
+        // РћСЃРЅРѕРІРЅРѕР№ С†РёРєР» РѕС‚РїСЂР°РІРєРё СЃРµСЂРІРµСЂСѓ
+        while ((dataFromUser = inConsole.readLine()) != null) {
+            outServer.println(dataFromUser);
+            dataFromServer = inServer.readLine();
+            //РџРµС‡Р°С‚Р°РµРј РѕС‚РІРµС‚ РѕС‚ СЃРµСЂРІРµСЂР° РЅР° РєРѕРЅСЃРѕР»СЊ РґР»СЏ РїСЂРѕРІРµСЂРєРё
+            System.out.println(dataFromServer);
+            //Р”Р»СЏ РѕРєРѕРЅС‡Р°РЅРёСЏ РїРѕСЃС‹Р»Р°РµРј РІ СЃРѕРѕР±С‰РµРЅРёРё close
+            if ("close".equalsIgnoreCase(dataFromUser)) {
+                break;
+            }
+        }
+        outServer.close();
+        inServer.close();
+        outServer.close();
+        server.close();
+    }
 }
